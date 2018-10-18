@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="layout-vertical.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel header="Roles">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <p:panel id="filter">
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-1 ui-lg-2"/>
+                                <div class="ui-g-12 ui-md-10 ui-lg-8">
+                                    <div class="ui-g">
+                                        <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                            <p:outputLabel for="name" value="Name: "/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-8 ui-lg-4 ui-fluid">
+                                            <p:inputText id="name" value="#{roleList.filter.name}" maxlength="50"/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                            <p:commandButton value="Filter" update=":form:roleTable, :form:buttons"
+                                                             action="#{roleList.filter()}" process="filter"/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                            <p:commandButton value="Reset"
+                                                             update=":form:roleTable, :form:buttons, :form:filter"
+                                                             action="#{roleList.reset()}" process="filter"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:panel>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:dataTable id="roleTable" var="role" value="#{roleList.roles}" rowKey="#{role.id}"
+                                     selectionMode="single" selection="#{roleList.selectedRole}" paginator="true"
+                                     rows="10" lazy="true">
+                            <p:ajax event="rowSelect" listener="#{roleList.onRowSelect}" update=":form:buttons"/>
+                            <p:ajax event="rowUnselect" listener="#{roleList.onRowUnselect}" update=":form:buttons"/>
+                            <p:column headerText="Name" sortBy="#{role.name}">
+                                <h:outputText value="#{role.name}"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:menubar id="buttons">
+                            <p:menuitem id="new-button" ajax="true" value="New" action="#{roleList.create()}"
+                                        icon="ui-icon-plus"/>
+                            <p:menuitem id="detail-button" ajax="true" value="Detail" action="#{roleList.detail()}"
+                                        icon="ui-icon-zoomin" disabled="#{roleList.selectedRole == null}"/>
+                            <p:menuitem id="edit-button" ajax="true" value="Edit" action="#{roleList.edit()}"
+                                        icon="ui-icon-pencil" disabled="#{roleList.selectedRole == null}"/>
+                            <p:menuitem id="delete-button" ajax="true" value="Delete" action="#{roleList.delete()}"
+                                        update=":form:roleTable, :form:buttons" icon="ui-icon-trash"
+                                        disabled="#{roleList.selectedRole == null}">
+                                <p:confirm header="Delete role" message="Do you really want to delete this role?"
+                                           icon="ui-icon-alert"/>
+                            </p:menuitem>
+                        </p:menubar>
+                    </div>
+                </div>
+            </p:panel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-2"/>
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                         icon="ui-icon-check"
+                                         update=":form:roleTable, :form:buttons"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                         icon="ui-icon-close"/>
+                    </div>
+                </div>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

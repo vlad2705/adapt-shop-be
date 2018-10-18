@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout-vertical.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{orderItemDetail.id}"/>
+        <f:viewParam name="productOrderId" value="#{orderItemDetail.productOrderId}"/>
+        <f:event type="preRenderView" listener="#{orderItemDetail.initialize(param['id'])}"/>
+    </f:metadata>
+    <ui:define name="content">
+        <h:form id="orderItemDetail">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel header="Order item detail">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-1 ui-lg-2"/>
+                    <div class="ui-g-12 ui-md-10 ui-lg-8">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="product" value="Product: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <h:outputText id="product" value="#{orderItemDetail.orderItem.productDto.name}"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="quantity" value="Quantity: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <h:outputText id="quantity" value="#{orderItemDetail.orderItem.quantity}"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-2 ui-lg-5" />
+                            <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                <p:commandButton value="Cancel" onclick="history.back(); return false;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

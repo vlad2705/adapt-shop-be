@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout-vertical.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{productDetail.id}"/>
+        <f:event type="preRenderView" listener="#{productDetail.initialize(param['id'])}"/>
+    </f:metadata>
+    <ui:define name="content">
+        <h:form id="productDetail">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel header="Product Form">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-1 ui-lg-2" />
+                    <div class="ui-g-12 ui-md-10- ui-lg-8">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-6">
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-4">
+                                        <p:outputLabel for="name" value="Name: "/>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-8">
+                                        <h:outputText id="name" value="#{productDetail.product.name}"/>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-4">
+                                        <p:outputLabel for="price" value="Price: "/>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-8">
+                                        <h:outputText id="price" value="#{productDetail.product.price}"/>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-4">
+                                        <p:outputLabel for="category" value="Category: " />
+                                    </div>
+                                    <div class="ui-g-12 ui-md-8">
+                                        <h:outputText id="category" value="#{productDetail.product.categoryData.name}"/>
+                                    </div>
+                                    <div class="ui-g-12 ui-fluid">
+                                        <p:fieldset id="description" legend="Description" toggleable="true" toggleSpeed="500">
+                                            <h:outputText value="#{productDetail.product.description}" />
+                                        </p:fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <p:galleria value="#{productDetail.pictures}" var="picture" panelWidth="300" panelHeight="375" showCaption="true">
+                                    <p:graphicImage value="#{productDetail.image}" alt="#{picture.size}" title="#{picture.name}" height="375" width="300">
+                                        <f:param name="id" value="#{picture.id}" />
+                                    </p:graphicImage>
+                                </p:galleria>
+                            </div>
+                            <div class="ui-g-12 ui-md-2 ui-lg-4" />
+                            <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                <p:commandButton value="Cancel" onclick="history.back(); return false;" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-1 ui-lg-2" />
+                </div>
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>

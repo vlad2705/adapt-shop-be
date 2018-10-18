@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="layout-vertical.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel header="Accunts">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <p:panel id="filter">
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-1 ui-lg-2"/>
+                                <div class="ui-g-12 ui-md-10 ui-lg-8">
+                                    <div class="ui-g">
+                                        <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                            <p:outputLabel for="firstName" value="First name: "/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                            <p:inputText id="firstName" value="#{accountList.filter.firstName}"
+                                                         maxlength="50"/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                            <p:outputLabel for="lastName" value="Last name: "/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                            <p:inputText id="lastName" value="#{accountList.filter.lastName}"
+                                                         maxlength="50"/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                            <p:outputLabel for="email" value="Email: "/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                            <p:inputText id="email" value="#{accountList.filter.email}" maxlength="50"/>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g">
+                                                <div class="ui-g-12 ui-md-2 ui-lg-4"/>
+                                                <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                                    <p:commandButton value="Filter"
+                                                                     update=":form:accountTable, :form:buttons"
+                                                                     action="#{accountList.filter()}" process="filter"/>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                                    <p:commandButton value="Reset"
+                                                                     update=":form:accountTable, :form:buttons, :form:filter"
+                                                                     action="#{accountList.reset()}" process="filter"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12 ui-md-1 ui-lg-2"/>
+                            </div>
+                        </p:panel>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:dataTable id="accountTable" var="account" value="#{accountList.accounts}"
+                                     rowKey="#{account.id}"
+                                     selectionMode="single" selection="#{accountList.selectedAccount}" paginator="true"
+                                     rows="10" lazy="true">
+                            <p:ajax event="rowSelect" listener="#{accountList.onRowSelect}" update=":form:buttons"/>
+                            <p:ajax event="rowUnselect" listener="#{accountList.onRowUnselect}" update=":form:buttons"/>
+                            <p:column headerText="First name" sortBy="#{account.firstName}">
+                                <h:outputText value="#{account.firstName}"/>
+                            </p:column>
+                            <p:column headerText="Last name" sortBy="#{account.lastName}">
+                                <h:outputText value="#{account.lastName}"/>
+                            </p:column>
+                            <p:column headerText="Email" sortBy="#{account.email}">
+                                <h:outputText value="#{account.email}"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:menubar id="buttons">
+                            <p:menuitem id="new-button" ajax="true" value="New" action="#{accountList.create()}"
+                                        icon="ui-icon-plus"/>
+                            <p:menuitem id="detail-button" ajax="true" value="Detail" action="#{accountList.detail()}"
+                                        icon="ui-icon-zoomin" disabled="#{accountList.selectedAccount == null}"/>
+                            <p:menuitem id="edit-button" ajax="true" value="Edit" action="#{accountList.edit()}"
+                                        icon="ui-icon-pencil" disabled="#{accountList.selectedAccount == null}"/>
+                            <p:menuitem id="delete-button" ajax="true" value="Delete" action="#{accountList.delete()}"
+                                        update=":form:accountTable, :form:buttons" icon="ui-icon-trash"
+                                        disabled="#{accountList.selectedAccount == null}">
+                                <p:confirm header="Delete account" message="Do you really want to delete this account?"
+                                           icon="ui-icon-alert"/>
+                            </p:menuitem>
+                        </p:menubar>
+                    </div>
+                </div>
+            </p:panel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-2"/>
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                         icon="ui-icon-check"
+                                         update=":form:accountTable, :form:buttons"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                         icon="ui-icon-close"/>
+                    </div>
+                </div>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

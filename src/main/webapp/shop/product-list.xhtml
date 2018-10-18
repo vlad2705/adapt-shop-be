@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout-vertical.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel header="Products">
+                <div class="ui-g">
+                    <p:panel id="filter">
+                        <div class="ui-g-12 ui-md-1 ui-lg-2" />
+                        <div class="ui-g-12 ui-md-10 ui-lg-8">
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                    <p:outputLabel for="name" value="Name: "/>
+                                </div>
+                                <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                    <p:inputText id="name" value="#{productList.filter.name}" maxlength="50"/>
+                                </div>
+                                <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                    <p:outputLabel for="category" value="Category: "/>
+                                </div>
+                                <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                    <p:inputText id="category" value="#{productList.filter.categoryName}" maxlength="50"/>
+                                </div>
+                                <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                    <p:outputLabel for="priceFrom" value="Price from: "/>
+                                </div>
+                                <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                    <p:inputNumber minValue="0" maxValue="999999999" id="priceFrom"
+                                                   value="#{productList.filter.priceFrom}"/>
+                                </div>
+                                <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                    <p:outputLabel for="priceTo" value="Price to: "/>
+                                </div>
+                                <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                    <p:inputNumber minValue="0" maxValue="999999999" id="priceTo"
+                                                   value="#{productList.filter.priceTo}"/>
+                                </div>
+                                <div class="ui-g-12 ui-fluid">
+                                    <div class="ui-g">
+                                        <div class="ui-g-12 ui-md-2 ui-lg-4" />
+                                        <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                            <p:commandButton value="Filter" update=":form:productTable, :form:buttons"
+                                                             action="#{productList.filter()}" process="filter"/>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                            <p:commandButton value="Reset" update=":form:productTable, :form:buttons, :form:filter"
+                                                             action="#{productList.reset()}" process="filter"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-md-1 ui-lg-2" />
+                    </p:panel>
+                    <div class="ui-g-12">
+                        <p:dataTable id="productTable" var="product" value="#{productList.products}"
+                                     rowKey="#{product.id}"
+                                     selectionMode="single" selection="#{productList.selectedProduct}" paginator="true"
+                                     rows="10" lazy="true">
+                            <p:ajax event="rowSelect" listener="#{productList.onRowSelect}" update=":form:buttons"/>
+                            <p:ajax event="rowUnselect" listener="#{productList.onRowUnselect}" update=":form:buttons"/>
+                            <p:column headerText="Name" sortBy="#{product.name}">
+                                <h:outputText value="#{product.name}"/>
+                            </p:column>
+                            <p:column headerText="Category" sortBy="#{product.category}">
+                                <h:outputText value="#{product.category}"/>
+                            </p:column>
+                            <p:column headerText="Price" sortBy="#{product.price}">
+                                <h:outputText value="#{product.price}"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:menubar id="buttons">
+                            <p:menuitem id="new-button" ajax="true" value="New" action="#{productList.create()}"
+                                        icon="ui-icon-plus"/>
+                            <p:menuitem id="detail-button" ajax="true" value="Detail" action="#{productList.detail()}"
+                                        icon="ui-icon-zoomin" disabled="#{productList.selectedProduct == null}"/>
+                            <p:menuitem id="edit-button" ajax="true" value="Edit" action="#{productList.edit()}"
+                                        icon="ui-icon-pencil" disabled="#{productList.selectedProduct == null}"/>
+                            <p:menuitem id="pictures-button" ajax="true" value="Pictures"
+                                        action="#{productList.pictures()}"
+                                        icon="ui-icon-image" disabled="#{productList.selectedProduct == null}"/>
+                            <p:menuitem id="delete-button" ajax="true" value="Delete" action="#{productList.delete()}"
+                                        update=":form:productTable, :form:buttons" icon="ui-icon-trash"
+                                        disabled="#{productList.selectedProduct == null}">
+                                <p:confirm header="Delete product" message="Do you really want to delete this product?"
+                                           icon="ui-icon-alert"/>
+                            </p:menuitem>
+                        </p:menubar>
+                    </div>
+                </div>
+            </p:panel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-2" />
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                         update=":form:productTable, :form:buttons"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </div>
+                </div>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

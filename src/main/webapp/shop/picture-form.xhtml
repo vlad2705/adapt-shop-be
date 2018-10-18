@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout-vertical.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{pictureForm.id}"/>
+        <f:event type="preRenderView" listener="#{pictureForm.initialize(param['id'])}"/>
+    </f:metadata>
+    <ui:define name="content">
+        <h:form id="pictureForm">
+            <p:growl id="msg" showDetail="true" />
+            <p:panel header="Pictures">
+                <h:panelGrid>
+                    <p:dataTable id="pictureTable" var="picture" rowIndexVar="index" value="#{pictureForm.pictures}" selection="#{pictureForm.selectedPicture}" rowKey="#{picture.id}" rows="10" paginator="true">
+                        <p:ajax event="rowSelectRadio" listener="#{pictureForm.onRowSelect}" />
+                        <p:column headerText="Primary" selectionMode="single" style="width:70px;text-align:center"/>
+                        <p:column headerText="Image">
+                            <p:graphicImage value="#{pictureForm.image}" height="75" width="75" >
+                                <f:param name="id" value="#{picture.id}" />
+                            </p:graphicImage>
+                        </p:column>
+
+                        <p:column headerText="Name">
+                            <h:outputText value="#{picture.name}" />
+                        </p:column>
+
+                        <p:column headerText="Type">
+                            <h:outputText value="#{picture.type}" />
+                        </p:column>
+
+                        <p:column headerText="Size">
+                            <h:outputText value="#{picture.size}" />
+                        </p:column>
+                        <p:column headerText="Delete" style="width:55px;text-align:center">
+                            <p:commandButton icon="ui-icon-closethick" action="#{pictureForm.deletePicture(picture)}" process="pictureForm" update="pictureTable" />
+                        </p:column>
+                    </p:dataTable>
+                    <p:fileUpload widgetVar="uploader" update="pictureTable" value="#{pictureForm.pictures}" fileUploadListener="#{pictureForm.addPictures}" mode="advanced" dragDropSupport="false"
+                                  multiple="true" sizeLimit="1000000" fileLimit="5" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                </h:panelGrid>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-4 ui-lg-5" />
+                    <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                        <p:commandButton value="Cancel" onclick="history.back(); return false;" />
+                    </div>
+                </div>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

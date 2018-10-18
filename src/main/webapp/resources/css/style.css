@@ -1,0 +1,19 @@
+.ui-layout-unit-header-icon, .ui-layout-unit-header-icon:hover, .ui-layout-unit-header-icon:focus {
+    margin-top: 0 !important;
+}
+
+.ui-layout-unit-header, .ui-layout-unit-footer {
+    text-align: center;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+    border-width: 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+.ui-layout-unit .ui-layout-unit-content {
+    overflow: hidden !important;
+}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout-vertical.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{productOrderForm.id}"/>
+        <f:event type="preRenderView" listener="#{productOrderForm.initialize(param['id'])}"/>
+    </f:metadata>
+    <ui:define name="content">
+        <h:form id="productOrderForm">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel header="Order Form">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-1 ui-lg-2"/>
+                    <div class="ui-g-12 ui-md-10 ui-lg-8">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12 ui-lg-4"/>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="orderStatus" value="Status: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:selectOneMenu id="orderStatus" value="#{productOrderForm.productOrder.orderStatus}">
+                                    <f:selectItems value="#{productOrderForm.orderStatuses}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:dataTable id="orderItemTable" var="orderItem" value="#{productOrderForm.orderItems}"
+                                             rowKey="#{orderItem.id}"
+                                             selectionMode="single" selection="#{productOrderForm.selectedOrderItem}"
+                                             paginator="true"
+                                             rows="10">
+                                    <p:ajax event="rowSelect" listener="#{productOrderForm.onRowSelect}"
+                                            update=":productOrderForm:buttons"/>
+                                    <p:ajax event="rowUnselect" listener="#{productOrderForm.onRowUnselect}"
+                                            update=":productOrderForm:buttons"/>
+                                    <p:column headerText="Product" sortBy="#{orderItem.productDto.name}">
+                                        <h:outputText value="#{orderItem.productDto.name}"/>
+                                    </p:column>
+                                    <p:column headerText="Quantity" sortBy="#{orderItem.quantity}">
+                                        <h:outputText value="#{orderItem.quantity}"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:menubar id="buttons">
+                                    <p:menuitem id="new-button" ajax="true" value="New"
+                                                action="#{productOrderForm.create()}" icon="ui-icon-plus"/>
+                                    <p:menuitem id="detail-button" ajax="true" value="Detail"
+                                                action="#{productOrderForm.detail()}"
+                                                icon="ui-icon-zoomin"
+                                                disabled="#{productOrderForm.selectedOrderItem == null}"/>
+                                    <p:menuitem id="edit-button" ajax="true" value="Edit"
+                                                action="#{productOrderForm.edit()}"
+                                                icon="ui-icon-pencil"
+                                                disabled="#{productOrderForm.selectedOrderItem == null}"/>
+                                    <p:menuitem id="delete-button" ajax="true" value="Delete"
+                                                action="#{productOrderForm.delete()}"
+                                                update=":productOrderForm:orderItemTable, :productOrderForm:buttons"
+                                                icon="ui-icon-trash"
+                                                disabled="#{productOrderForm.selectedOrderItem == null}">
+                                        <p:confirm header="Delete a product"
+                                                   message="Do you really want to delete this product?"
+                                                   icon="ui-icon-alert"/>
+                                    </p:menuitem>
+                                </p:menubar>
+                            </div>
+                            <div class="ui-g-12 ui-md-2 ui-lg-4" />
+                            <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                <p:commandButton value="Save" action="#{productOrderForm.save}"
+                                                 process="productOrderForm"
+                                                 update="productOrderForm" ajax="false"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                <p:commandButton value="Cancel" onclick="history.back(); return false;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p:panel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 update=":productOrderForm:orderItemTable, :productOrderForm:buttons"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

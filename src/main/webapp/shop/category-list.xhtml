@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="layout-vertical.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel id="categoryList" header="Category List">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-1 ui-lg-2"/>
+                    <div class="ui-g-12 ui-md-10 ui-lg-8">
+                        <p:panel id="filter">
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                    <p:outputLabel for="name" value="Name: "/>
+                                </div>
+                                <div class="ui-g-12 ui-md-8 ui-lg-4 ui-fluid">
+                                    <p:inputText id="name" value="#{categoryList.filter.name}" maxlength="50"/>
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3 ui-fluid">
+                                    <p:commandButton value="Filter" update=":form:categoryTable, :form:buttons"
+                                                     action="#{categoryList.filter()}" process="filter"/>
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3 ui-fluid">
+                                    <p:commandButton value="Reset"
+                                                     update=":form:categoryTable, :form:buttons, :form:filter"
+                                                     action="#{categoryList.reset()}" process="filter"/>
+                                </div>
+                            </div>
+                        </p:panel>
+                    </div>
+                    <div class="ui-g-12 ui-md-1 ui-lg-2"/>
+                    <div class="ui-g-12">
+                        <p:treeTable id="categoryTable" value="#{categoryList.root}" var="category"
+                                     selectionMode="single" selection="#{categoryList.selectedCategory}">
+                            <p:ajax event="select" listener="#{categoryList.onNodeSelect}" update=":form:buttons"/>
+                            <p:ajax event="unselect" listener="#{categoryList.onNodeUnselect}" update=":form:buttons"/>
+                            <p:column headerText="Name" sortBy="#{category.name}">
+                                <h:outputText value="#{category.name}"/>
+                            </p:column>
+                        </p:treeTable>
+                        <p:menubar id="buttons">
+                            <p:menuitem id="new-button" ajax="true" value="New" action="#{categoryList.create()}"
+                                        icon="ui-icon-plus"/>
+                            <p:menuitem id="detail-button" ajax="true" value="Detail" action="#{categoryList.detail()}"
+                                        icon="ui-icon-zoomin" disabled="#{categoryList.selectedCategory == null}"/>
+                            <p:menuitem id="edit-button" ajax="true" value="Edit" action="#{categoryList.edit()}"
+                                        icon="ui-icon-pencil" disabled="#{categoryList.selectedCategory == null}"/>
+                            <p:menuitem id="delete-button" ajax="true" value="Delete" action="#{categoryList.delete()}"
+                                        update=":form:categoryTable" icon="ui-icon-trash"
+                                        disabled="#{categoryList.selectedCategory == null}">
+                                <p:confirm header="Delete category"
+                                           message="Do you really want to delete this category?" icon="ui-icon-alert"/>
+                            </p:menuitem>
+                        </p:menubar>
+                    </div>
+                </div>
+            </p:panel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-2" />
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                         update=":form:categoryTable"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </div>
+                </div>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout-vertical.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{accountForm.id}"/>
+        <f:event type="preRenderView" listener="#{accountForm.initialize(param['id'])}"/>
+    </f:metadata>
+    <ui:define name="content">
+        <h:form id="accountForm">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel header="Account Form">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-1 ui-lg-2"/>
+                    <div class="ui-g-12 ui-md-10 ui-lg-8">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="firstName" value="First name: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="firstName" value="#{accountForm.account.firstName}" maxlength="255" required="true"
+                                             requiredMessage="First name is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="lastName" value="Last name: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="lastName" value="#{accountForm.account.lastName}" maxlength="255" required="true"
+                                             requiredMessage="Last name is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="phone" value="Phone: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="phone" value="#{accountForm.account.phone}" maxlength="255" required="true"
+                                             requiredMessage="Last name is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="email" value="Email: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="email" value="#{accountForm.account.personDto.email}" maxlength="255" required="true"
+                                             requiredMessage="Email is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="address" value="Address: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="address" value="#{accountForm.account.address.address}" maxlength="255" required="true"
+                                             requiredMessage="address is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="postalCode" value="Postal code: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="postalCode" value="#{accountForm.account.address.postalCode}" maxlength="255" required="true"
+                                             requiredMessage="Postal code is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="city" value="City: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="city" value="#{accountForm.account.address.city}" maxlength="255" required="true"
+                                             requiredMessage="City is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="country" value="Country: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="country" value="#{accountForm.account.address.country}" maxlength="255" required="true"
+                                             requiredMessage="Country is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="password" value="Password: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="password" type="password" value="#{accountForm.account.personDto.password}" maxlength="50"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <h:outputLabel for="roles" value="Roles:" />
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:selectCheckboxMenu id="roles" value="#{accountForm.account.personDto.roles}" label="Roles" multiple="true"
+                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:300px">
+                                    <f:selectItems value="#{accountForm.roles}" />
+                                </p:selectCheckboxMenu>
+                            </div>
+                            <div class="ui-g-12">
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-2 ui-lg-4"/>
+                                    <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                        <p:commandButton value="Save" action="#{accountForm.save}" process="accountForm"
+                                                         update="accountForm" ajax="false" />
+                                    </div>
+                                    <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                        <p:commandButton value="Cancel" onclick="history.back(); return false;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

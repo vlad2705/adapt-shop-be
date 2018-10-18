@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="layout-vertical.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{productForm.id}"/>
+        <f:event type="preRenderView" listener="#{productForm.initialize(param['id'])}"/>
+    </f:metadata>
+    <ui:define name="content">
+        <h:form id="productForm">
+            <p:growl id="msg" showDetail="true"/>
+            <p:panel header="Product Form">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-1 ui-lg-2" />
+                    <div class="ui-g-12 ui-md-1- ui-lg-8">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="name" value="Name: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputText id="name" value="#{productForm.product.name}" maxlength="255" required="true"
+                                             requiredMessage="Product name is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                <p:outputLabel for="price" value="Price: "/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <p:inputNumber minValue="0" maxValue="999999999" id="price" value="#{productForm.product.price}"
+                                               required="true" requiredMessage="Price is mandatory"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 ui-lg-4">
+                                <div class="ui-g">
+                                    <div class="ui-g-12">
+                                        <p:outputLabel for="category" value="Category: " />
+                                    </div>
+                                    <div class="ui-g-12 ui-fluid">
+                                        <p:tree id="category" value="#{productForm.root}" var="category"
+                                                selectionMode="single"
+                                                selection="#{productForm.product.category}"
+                                                required="true"
+                                                requiredMessage="Category is mandatory">
+                                            <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                <h:outputText value="#{category.name}"/>
+                                            </p:treeNode>
+                                        </p:tree>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-8">
+                                <div class="ui-g">
+                                    <div class="ui-g-12">
+                                        <p:outputLabel for="description" value="Description: "/>
+                                    </div>
+                                    <div class="ui-g-12 ui-fluid">
+                                        <p:inputTextarea id="description" rows="6" cols="33" value="#{productForm.product.description}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-2 ui-lg-4" />
+                            <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                <p:commandButton value="Save" action="#{productForm.save}" process="productForm"
+                                                 update="productForm"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-2 ui-fluid">
+                                <p:commandButton value="Cancel" onclick="history.back(); return false;" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-1 ui-lg-2" />
+                </div>
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>

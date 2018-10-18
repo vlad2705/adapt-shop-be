@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <h:outputStylesheet name="css/style.css" />
+        <title>Adapt Shop</title>
+    </h:head>
+    <h:body>
+        <p:layout id="layout" fullPage="true">
+            <p:growl id="msg" showDetail="true"/>
+            <p:layoutUnit position="west" resizable="true" collapsible="true" size="150" header="Menu">
+                <p:megaMenu orientation="#{vertical}">
+                    <p:menuitem value="Products" url="/admin/products"/>
+                    <p:menuitem value="Categories" url="/admin/categories"/>
+                    <p:menuitem value="Orders" url="/admin/orders"/>
+                    <p:menuitem value="Accounts" url="/admin/accounts"/>
+                    <p:menuitem value="Roles" url="/admin/roles"/>
+                </p:megaMenu>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="north">
+                <p:toolbar>
+                    <f:facet name="right">
+                        <h:outputLink value="${request.contextPath}/admin/logout" style="padding-right:1.1em">
+                            Logout
+                        </h:outputLink>
+                    </f:facet>
+
+                </p:toolbar>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <ui:insert name="content"/>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</f:view>
+</html>
